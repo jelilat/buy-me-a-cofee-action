@@ -1,10 +1,11 @@
 {
-    "version": 2,
-    "builds": [
-      { "src": "api/tip.ts", "use": "@vercel/node" }
-    ],
-    "routes": [
-      { "src": "/api/tip(.*)", "dest": "/api/tip.ts" },
-      { "src": "/(.*)", "dest": "public/$1" }
-    ]
-  }
+  "version": 2,
+  "builds": [
+    { "src": "api/tip.ts", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/tip", "dest": "/api/tip.ts" },
+    { "src": "/api/tip/(.*)", "dest": "/api/tip.ts" },
+    { "src": "/(.*)", "dest": "public/$1" }
+  ]
+}
