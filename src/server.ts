@@ -75,8 +75,4 @@ app.post("/api/tip", (req: Request, res: Response) => {
   res.json({ transaction: JSON.stringify(transaction) });
 });
 
-app.use(express.static("public"));
-
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
-});
+export default app;

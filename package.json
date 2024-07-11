@@ -2,9 +2,10 @@
   "name": "buy-me-a-cofee-action",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "api/tip.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node src/server.ts",
+    "dev": "nodemon src/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "typescript": "^5.5.3"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17"
+    "@types/cors": "^2.8.17",
+    "nodemon": "^2.0.15"
   }
 }
