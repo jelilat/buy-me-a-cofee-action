@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Me a Coffee - Tip</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .tip-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        #custom-tip-form {
+            margin-top: 20px;
+        }
+        #custom-amount {
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Buy Me a Coffee</h1>
+    <p>Support me by buying me a coffee using ETH. Choose an amount or enter a custom amount.</p>
+    <img src="/buy-crypto-coffee.webp" alt="Buy Crypto Coffee" style="max-width: 200px;">
+    <div>
+        <button class="tip-button" onclick="tip(0.01)">Tip 0.01 ETH</button>
+        <button class="tip-button" onclick="tip(0.05)">Tip 0.05 ETH</button>
+        <button class="tip-button" onclick="tip(0.1)">Tip 0.1 ETH</button>
+    </div>
+    <form id="custom-tip-form">
+        <input type="number" id="custom-amount" step="0.01" min="0.01" placeholder="Enter custom amount in ETH">
+        <button type="submit" class="tip-button">Tip Custom Amount</button>
+    </form>
+
+    <script>
+        function tip(amount) {
+            fetch(`/api/tip/${amount}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => alert(`Transaction created for ${amount} ETH tip`))
+                .catch(error => alert('Error creating transaction'));
+        }
+
+        document.getElementById('custom-tip-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const amount = document.getElementById('custom-amount').value;
+            if (amount && !isNaN(amount) && parseFloat(amount) > 0) {
+                tip(amount);
+            } else {
+                alert('Please enter a valid amount');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -69,15 +69,6 @@ app.post("/api/tip", (req, res) => {
     // Logic to handle the transaction creation and processing
     res.json({ transaction: JSON.stringify(transaction) });
 });
-// app.post("/api/tip/custom", (req: Request, res: Response) => {
-//   const { amount } = req.body;
-//   const transaction = {
-//     to: DONATION_DESTINATION_WALLET,
-//     value: amount,
-//   };
-//   // Logic to handle the transaction creation and processing
-//   res.json({ status: "success", transaction });
-// });
 app.use(express_1.default.static("public"));
 app.listen(3000, () => {
     console.log("Server running on port 3000");
