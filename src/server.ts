@@ -33,7 +33,7 @@ function generateHtmlWithMetaTags(
   imageUrl: string,
   amount?: string
 ): string {
-  const baseUrl = "https://buy-me-a-cofee-action.vercel.app/tip";
+  const baseUrl = "https://buy-me-a-cofee-action.vercel.app/api/tip";
   const urlToUnfurl = amount ? `${baseUrl}/${amount}` : baseUrl;
 
   return `
@@ -72,7 +72,7 @@ function generateHtmlWithMetaTags(
   `;
 }
 
-app.get("/tip", (req: Request, res: Response) => {
+app.get("/api/tip", (req: Request, res: Response) => {
   console.log("Received request for /tip");
   console.log("Accept header:", req.get("Accept"));
 
@@ -95,10 +95,10 @@ app.get("/tip", (req: Request, res: Response) => {
         actions: [
           ...DONATION_AMOUNT_ETH_OPTIONS.map((amount) => ({
             label: `${amount} ETH`,
-            href: `/tip?amount=${amount}`,
+            href: `/api/tip?amount=${amount}`,
           })),
           {
-            href: `/tip?amount={amount}`,
+            href: `/api/tip?amount={amount}`,
             label: "Custom Amount",
             parameters: [
               {
@@ -114,7 +114,7 @@ app.get("/tip", (req: Request, res: Response) => {
   }
 });
 
-app.get("/tip/:amount", (req: Request, res: Response) => {
+app.get("/api/tip/:amount", (req: Request, res: Response) => {
   console.log("Received request for /tip/:amount");
   console.log("Amount:", req.params.amount);
   console.log("Accept header:", req.get("Accept"));
@@ -138,7 +138,7 @@ app.get("/tip/:amount", (req: Request, res: Response) => {
         actions: [
           {
             label: "Buy Me a Coffee",
-            href: `/tip?amount=${amount}`,
+            href: `/api/tip?amount=${amount}`,
           },
         ],
       },
@@ -147,7 +147,7 @@ app.get("/tip/:amount", (req: Request, res: Response) => {
   }
 });
 
-app.post("/tip", (req: Request, res: Response) => {
+app.post("/api/tip", (req: Request, res: Response) => {
   const { amount } = req.query;
 
   const transaction = {
