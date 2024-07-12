@@ -69,6 +69,9 @@ function generateHtmlWithMetaTags(
 }
 
 app.get("/api/tip", (req: Request, res: Response) => {
+  console.log("Received request for /api/tip");
+  console.log("Accept header:", req.get("Accept"));
+
   const acceptHeader = req.get("Accept");
   const title = "Buy Me a Coffee";
   const description =
@@ -109,6 +112,10 @@ app.get("/api/tip", (req: Request, res: Response) => {
 });
 
 app.get("/api/tip/:amount", (req: Request, res: Response) => {
+  console.log("Received request for /api/tip/:amount");
+  console.log("Amount:", req.params.amount);
+  console.log("Accept header:", req.get("Accept"));
+
   const amount = req.params.amount;
   const acceptHeader = req.get("Accept");
   const title = `Tip ${amount} ETH`;
