@@ -36,30 +36,6 @@ function generateHtmlWithMetaTags(
   const baseUrl = "https://buy-me-a-cofee-action.vercel.app/api/tip";
   const urlToUnfurl = amount ? `${baseUrl}/${amount}` : baseUrl;
 
-  const jsonData = {
-    title,
-    icon: imageUrl,
-    description,
-    links: {
-      actions: [
-        ...DONATION_AMOUNT_ETH_OPTIONS.map((amount) => ({
-          label: `${amount} ETH`,
-          href: `/api/tip?amount=${amount}`,
-        })),
-        {
-          href: `/api/tip?amount={amount}`,
-          label: "Custom Amount",
-          parameters: [
-            {
-              name: "amount",
-              label: "Enter a custom USD amount",
-            },
-          ],
-        },
-      ],
-    },
-  };
-
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -86,28 +62,22 @@ function generateHtmlWithMetaTags(
     
     <!-- Other meta tags -->
     <meta name="description" content="${description}">
+    <script>
+      // Delay redirect to allow metadata to be processed
+      setTimeout(function() {
+        document.getElementById('debug').textContent = 'Redirecting now...';
+        window.location.href = "https://ethereum-blink-unfurler.vercel.app/?url=" + encodeURIComponent("${urlToUnfurl}");
+      }, 5000);  // 5 seconds delay
+    </script>
 </head>
 <body>
     <h1>${title}</h1>
     <p>${description}</p>
     <img src="${imageUrl}" alt="${title}" style="max-width: 300px; height: auto;">
-    <p id="redirect-message">Redirecting to the donation page...</p>
-    <script type="application/json" id="pageData">
-      ${JSON.stringify(jsonData)}
-    </script>
-    <script>
-      // Delay redirect to allow metadata to be processed
-      setTimeout(function() {
-        // Get the JSON data
-        var jsonData = JSON.parse(document.getElementById('pageData').textContent);
-        
-        // Construct the redirect URL
-        var redirectUrl = "https://ethereum-blink-unfurler.vercel.app/?url=" + ${urlToUnfurl});
-        
-        // Redirect
-        window.location.href = redirectUrl;
-      }, 5000);  // 5 second delay
-    </script>
+    <p id="debug">Waiting to redirect...</p>
+    <p>If you are not redirected automatically, please <a href="https://ethereum-blink-unfurler.vercel.app/?url=${encodeURIComponent(
+      urlToUnfurl
+    )}">click here</a>.</p>
 </body>
 </html>
   `;
