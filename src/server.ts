@@ -73,44 +73,53 @@ function generateHtmlWithMetaTags(
 }
 
 app.get("/api/tip", (req: Request, res: Response) => {
-  console.log("Received request for /tip");
+  console.log("Received request for /api/tip");
   console.log("Accept header:", req.get("Accept"));
+  console.log("User-Agent:", req.get("User-Agent"));
 
-  const acceptHeader = req.get("Accept");
   const title = "Buy Me a Coffee";
   const description =
     "Support me by buying me a coffee using ETH. Choose an amount or enter a custom amount.";
-  const imageUrl = "/images/buy-me-coffe.jpg";
+  const imageUrl =
+    "https://buy-me-a-cofee-action.vercel.app/images/buy-me-coffe.jpg";
 
-  if (acceptHeader && acceptHeader.includes("text/html")) {
-    // If the request accepts HTML, send the HTML page with meta tags
+  const jsonResponse = {
+    title,
+    icon: imageUrl,
+    description,
+    links: {
+      actions: [
+        ...DONATION_AMOUNT_ETH_OPTIONS.map((amount) => ({
+          label: `${amount} ETH`,
+          href: `/api/tip?amount=${amount}`,
+        })),
+        {
+          href: `/api/tip?amount={amount}`,
+          label: "Custom Amount",
+          parameters: [
+            {
+              name: "amount",
+              label: "Enter a custom USD amount",
+            },
+          ],
+        },
+      ],
+    },
+  };
+
+  const acceptHeader = req.get("Accept");
+  const userAgent = req.get("User-Agent");
+
+  // Check if it's likely to be the Twitter card scraper or a browser
+  if (
+    (acceptHeader && acceptHeader.includes("text/html")) ||
+    (userAgent && userAgent.toLowerCase().includes("twitterbot"))
+  ) {
+    // If it's a browser or the Twitter scraper, send HTML with meta tags
     res.send(generateHtmlWithMetaTags(title, description, imageUrl));
   } else {
-    // Otherwise, send the JSON response as before
-    const response = {
-      title,
-      icon: imageUrl,
-      description,
-      links: {
-        actions: [
-          ...DONATION_AMOUNT_ETH_OPTIONS.map((amount) => ({
-            label: `${amount} ETH`,
-            href: `/api/tip?amount=${amount}`,
-          })),
-          {
-            href: `/api/tip?amount={amount}`,
-            label: "Custom Amount",
-            parameters: [
-              {
-                name: "amount",
-                label: "Enter a custom USD amount",
-              },
-            ],
-          },
-        ],
-      },
-    };
-    res.json(response);
+    // For all other cases, send the JSON response
+    res.json(jsonResponse);
   }
 });
 
