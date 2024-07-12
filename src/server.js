@@ -20,7 +20,7 @@ const DEFAULT_DONATION_AMOUNT_ETH = 0.01;
 app.get("/api/tip", (req, res) => {
     const response = {
         title: "Buy Me a Coffee",
-        icon: "https://dl.openseauserdata.com/cache/originImage/files/82569bec99a03fc59005c121383fe13d.png",
+        icon: "/images/buy-me-coffe.jpg",
         description: "Support me by buying me a coffee using ETH. Choose an amount or enter a custom amount.",
         links: {
             actions: [
@@ -47,7 +47,7 @@ app.get("/api/tip/:amount", (req, res) => {
     const amount = req.params.amount;
     const response = {
         title: `Tip ${amount} ETH`,
-        icon: "https://dl.openseauserdata.com/cache/originImage/files/82569bec99a03fc59005c121383fe13d.png",
+        icon: "/images/buy-me-coffe.jpg",
         description: `Tip ${amount} ETH to support.`,
         links: {
             actions: [

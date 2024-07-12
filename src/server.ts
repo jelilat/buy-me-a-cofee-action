@@ -71,8 +71,7 @@ app.get("/api/tip", (req: Request, res: Response) => {
   const title = "Buy Me a Coffee";
   const description =
     "Support me by buying me a coffee using ETH. Choose an amount or enter a custom amount.";
-  const imageUrl =
-    "https://dl.openseauserdata.com/cache/originImage/files/82569bec99a03fc59005c121383fe13d.png";
+  const imageUrl = "/images/buy-me-coffe.jpg";
 
   if (acceptHeader && acceptHeader.includes("text/html")) {
     // If the request accepts HTML, send the HTML page with meta tags
@@ -115,8 +114,7 @@ app.get("/api/tip/:amount", (req: Request, res: Response) => {
   const acceptHeader = req.get("Accept");
   const title = `Tip ${amount} ETH`;
   const description = `Tip ${amount} ETH to support.`;
-  const imageUrl =
-    "https://dl.openseauserdata.com/cache/originImage/files/82569bec99a03fc59005c121383fe13d.png";
+  const imageUrl = "/images/buy-me-coffe.jpg";
 
   if (acceptHeader && acceptHeader.includes("text/html")) {
     // If the request accepts HTML, send the HTML page with meta tags
