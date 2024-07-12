@@ -43,7 +43,10 @@ function generateHtmlWithMetaTags(
     <meta property="og:image" content="${imageUrl}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="${urlToUnfurl}">
+
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@tjelailah">
+    <meta name="twitter:creator" content="@tjelailah">
     <meta name="twitter:title" content="${title}">
     <meta name="twitter:description" content="${description}">
     <meta name="twitter:image" content="${imageUrl}">
