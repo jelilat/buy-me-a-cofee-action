@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
+import path from "path";
 
 const app = express();
 
@@ -12,6 +13,14 @@ const corsOptions = {
 
 app.use(cors(corsOptions)); // Apply CORS to all routes
 app.use(express.json());
+
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, "../public")));
+
+// Serve index.html for the root route
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
 
 const DONATION_DESTINATION_WALLET =
   "0x66fe4806cD41BcD308c9d2f6815AEf6b2e38f9a3";

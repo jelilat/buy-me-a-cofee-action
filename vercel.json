@@ -8,6 +8,6 @@
     { "src": "/api/tip", "dest": "/api/tip.ts" },
     { "src": "/api/tip/(.*)", "dest": "/api/tip.ts" },
     { "src": "^/$", "dest": "/index.html" },
-    { "src": "/(.*)", "dest": "public/$1" }
+    { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
