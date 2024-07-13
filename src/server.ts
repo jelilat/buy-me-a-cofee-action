@@ -116,6 +116,7 @@ app.get("/api/tip", (req: Request, res: Response) => {
         },
       ],
     },
+    isEthereum: true,
   };
 
   const acceptHeader = req.get("Accept");
@@ -162,6 +163,7 @@ app.get("/api/tip/:amount", (req: Request, res: Response) => {
           },
         ],
       },
+      isEthereum: true,
     };
     res.json(response);
   }
