@@ -2,6 +2,9 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import path from "path";
 
+import { serializeTransaction, TransactionSerializable } from "viem";
+import { parseUnits, encodeFunctionData } from "viem";
+
 const app = express();
 
 // Configure CORS
@@ -24,8 +27,10 @@ app.get("/", (req, res) => {
 
 const DONATION_DESTINATION_WALLET =
   "0x66fe4806cD41BcD308c9d2f6815AEf6b2e38f9a3";
-const DONATION_AMOUNT_ETH_OPTIONS = [0.01, 0.1, 1];
-const DEFAULT_DONATION_AMOUNT_ETH = 0.01;
+const DONATION_AMOUNT_USDC_OPTIONS = [10, 50, 100];
+const DEFAULT_DONATION_AMOUNT_USDC = 10;
+
+const USDC_CONTRACT_ADDRESS = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"; // Mainnet USDC address
 
 function generateHtmlWithMetaTags(
   title: string,
@@ -90,7 +95,7 @@ app.get("/api/tip", (req: Request, res: Response) => {
 
   const title = "Buy Me a Coffee";
   const description =
-    "Support me by buying me a coffee using ETH. Choose an amount or enter a custom amount.";
+    "Support me by buying me a coffee using USDC. Choose an amount or enter a custom amount.";
   const imageUrl =
     "https://buy-me-a-cofee-action.vercel.app/images/buy-me-coffe.jpg";
 
@@ -100,8 +105,8 @@ app.get("/api/tip", (req: Request, res: Response) => {
     description,
     links: {
       actions: [
-        ...DONATION_AMOUNT_ETH_OPTIONS.map((amount) => ({
-          label: `${amount} ETH`,
+        ...DONATION_AMOUNT_USDC_OPTIONS.map((amount) => ({
+          label: `${amount} USDC`,
           href: `/api/tip?amount=${amount}`,
         })),
         {
@@ -142,8 +147,8 @@ app.get("/api/tip/:amount", (req: Request, res: Response) => {
 
   const amount = req.params.amount;
   const acceptHeader = req.get("Accept");
-  const title = `Tip ${amount} ETH`;
-  const description = `Tip ${amount} ETH to support.`;
+  const title = `Tip ${amount} USDC`;
+  const description = `Tip ${amount} USDC to support.`;
   const imageUrl = "/images/buy-me-coffe.jpg";
 
   if (acceptHeader && acceptHeader.includes("text/html")) {
@@ -169,15 +174,44 @@ app.get("/api/tip/:amount", (req: Request, res: Response) => {
   }
 });
 
-app.post("/api/tip", (req: Request, res: Response) => {
+app.post("/api/tip", async (req: Request, res: Response) => {
   const { amount } = req.query;
 
-  const transaction = {
-    to: DONATION_DESTINATION_WALLET,
-    value: amount,
-  };
-  // Logic to handle the transaction creation and processing
-  res.json({ transaction: JSON.stringify(transaction) });
+  const transaction = await prepareUSDCTransaction(
+    DONATION_DESTINATION_WALLET,
+    amount as string,
+    1
+  );
+
+  res.json({ transaction });
 });
+
+export async function prepareUSDCTransaction(
+  to: `0x${string}`,
+  amount: string,
+  chainId: number
+): Promise<string> {
+  const transactionData: TransactionSerializable = {
+    to: USDC_CONTRACT_ADDRESS,
+    data: encodeFunctionData({
+      abi: [
+        {
+          name: "transfer",
+          type: "function",
+          inputs: [
+            { name: "recipient", type: "address" },
+            { name: "amount", type: "uint256" },
+          ],
+          outputs: [{ type: "bool" }],
+        },
+      ],
+      args: [to, parseUnits(amount, 6)], // USDC has 6 decimal places
+    }),
+    chainId,
+  };
+
+  const serializedTx = serializeTransaction(transactionData);
+  return Buffer.from(serializedTx).toString("base64");
+}
 
 export default app;
