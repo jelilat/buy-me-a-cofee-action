@@ -89,10 +89,6 @@ function generateHtmlWithMetaTags(
 }
 
 app.get("/api/tip", (req: Request, res: Response) => {
-  console.log("Received request for /api/tip");
-  console.log("Accept header:", req.get("Accept"));
-  console.log("User-Agent:", req.get("User-Agent"));
-
   const title = "Buy Me a Coffee";
   const description =
     "Support me by buying me a coffee using USDC. Choose an amount or enter a custom amount.";
@@ -141,15 +137,11 @@ app.get("/api/tip", (req: Request, res: Response) => {
 });
 
 app.get("/api/tip/:amount", (req: Request, res: Response) => {
-  console.log("Received request for /tip/:amount");
-  console.log("Amount:", req.params.amount);
-  console.log("Accept header:", req.get("Accept"));
-
   const amount = req.params.amount;
   const acceptHeader = req.get("Accept");
   const title = `Tip ${amount} USDC`;
   const description = `Tip ${amount} USDC to support.`;
-  const imageUrl = "/images/buy-me-coffe.jpg";
+  const imageUrl = "/images/buy-me-coffee.jpg";
 
   if (acceptHeader && acceptHeader.includes("text/html")) {
     // If the request accepts HTML, send the HTML page with meta tags
@@ -208,10 +200,10 @@ export async function prepareUSDCTransaction(
       args: [to, parseUnits(amount, 6)], // USDC has 6 decimal places
     }),
     chainId,
+    type: "eip1559",
   };
-
   const serializedTx = serializeTransaction(transactionData);
-  return Buffer.from(serializedTx).toString("base64");
+  return serializedTx;
 }
 
 export default app;
