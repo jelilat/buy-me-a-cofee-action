@@ -93,7 +93,7 @@ app.get("/api/tip", (req: Request, res: Response) => {
   const description =
     "Support me by buying me a coffee using USDC. Choose an amount or enter a custom amount.";
   const imageUrl =
-    "https://buy-me-a-cofee-action.vercel.app/images/buy-me-coffe.jpg";
+    "https://buy-me-a-cofee-action.vercel.app/images/buy-me-coffee.jpg";
 
   const jsonResponse = {
     title,
